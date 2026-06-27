@@ -1,0 +1,98 @@
+/* =========================================
+   Google Font
+========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* =========================================
+   Color Palette
+========================================= */
+
+:root{
+
+    --primary:#2563EB;
+    --success:#22C55E;
+    --danger:#EF4444;
+    --warning:#F59E0B;
+
+    --sidebar:#0F172A;
+
+    --background:#F8FAFC;
+
+    --card:#FFFFFF;
+
+    --text:#1E293B;
+
+    --muted:#64748B;
+
+    --border:#E2E8F0;
+
+    --shadow:0 10px 25px rgba(0,0,0,.08);
+
+    --radius:18px;
+
+}
+
+/* =========================================
+   Global
+========================================= */
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:var(--background);
+
+    color:var(--text);
+
+}
+
+/* =========================================
+   Links
+========================================= */
+
+a{
+
+    text-decoration:none;
+
+}
+
+/* =========================================
+   Cards
+========================================= */
+
+.card{
+
+    border:none;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+}
+
+/* =========================================
+   Buttons
+========================================= */
+
+.btn{
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+}
