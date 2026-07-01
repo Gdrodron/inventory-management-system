@@ -1,0 +1,59 @@
+<div class="row g-4">
+
+    <!-- Total Products -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon-box blue">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+                <p>Total Products</p>
+                <h3>{{ total_products or 0 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Stock -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon-box green">
+                <i class="bi bi-stack"></i>
+            </div>
+
+            <div>
+                <p>Total Stock</p>
+                <h3>{{ total_stock or 0 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Value -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon-box yellow">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <div>
+                <p>Inventory Value</p>
+                <h3>₱ {{ "{:,.2f}".format(inventory_value or 0) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon-box red">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+
+            <div>
+                <p>Low Stock</p>
+                <h3>{{ low_stock or 0 }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>

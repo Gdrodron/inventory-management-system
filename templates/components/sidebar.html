@@ -1,0 +1,74 @@
+<div class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-header">
+
+        <h3>📦 Inventory</h3>
+        <p>Management System</p>
+
+    </div>
+
+    <!-- Menu -->
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="{{ url_for('index') }}">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        {% if session.get("role", "").lower() == "admin" %}
+        <li>
+            <a href="{{ url_for('add_product') }}">
+                <i class="bi bi-plus-circle"></i>
+                <span>Add Product</span>
+            </a>
+        </li>
+        {% endif %}
+
+        <li>
+            <a href="{{ url_for('transactions') }}">
+                <i class="bi bi-clock-history"></i>
+                <span>Transactions</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('reports') }}">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span>Reports</span>
+            </a>
+        </li>
+
+    </ul>
+
+    <!-- User -->
+    <div class="sidebar-user">
+
+        <div class="avatar">
+            {{ session.get("user", "?")[0]|upper }}
+        </div>
+
+        <div>
+            <strong>
+                {{ session.get("user", "Guest") }}
+            </strong>
+
+            <br>
+
+            <small class="text-light">
+                {{ session.get("role", "user") }}
+            </small>
+
+        </div>
+
+    </div>
+
+    <!-- Logout -->
+    <a href="{{ url_for('logout') }}" class="logout-btn">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
+
+</div>

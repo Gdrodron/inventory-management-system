@@ -1,0 +1,127 @@
+<nav class="top-navbar">
+
+    <!-- Left -->
+    <div>
+
+        <h4 class="mb-0 fw-bold">
+            Dashboard
+        </h4>
+
+        <small class="text-muted">
+            Welcome back,
+            {{ session["user"] }}
+        </small>
+
+    </div>
+
+    <!-- Right -->
+    <div class="d-flex align-items-center gap-3">
+
+        <!-- Notification -->
+        <div class="dropdown">
+
+            <button
+                class="btn btn-light position-relative rounded-circle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+
+                <i class="bi bi-bell fs-5"></i>
+
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                    {{ notifications|length }}
+
+                </span>
+
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end notification-menu shadow">
+
+                <li class="dropdown-header fw-bold">
+                    Notifications
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                {% if notifications %}
+
+                    {% for item in notifications %}
+
+                    <li>
+
+                        <a href="#" class="dropdown-item">
+
+                            <strong>{{ item.title }}</strong>
+
+                            <br>
+
+                            <small class="text-muted">
+
+                                {{ item.message }}
+
+                            </small>
+
+                        </a>
+
+                    </li>
+
+                    {% if not loop.last %}
+                    <li><hr class="dropdown-divider"></li>
+                    {% endif %}
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <li>
+
+                        <span class="dropdown-item text-center text-muted">
+
+                            <i class="bi bi-bell-slash"></i>
+
+                            No notifications
+
+                        </span>
+
+                    </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+
+        <!-- Profile -->
+
+        <div class="d-flex align-items-center">
+
+            <div class="avatar me-2">
+
+                {{ session["user"][0]|upper }}
+
+            </div>
+
+            <div>
+
+                <strong>
+
+                    {{ session["user"] }}
+
+                </strong>
+
+                <br>
+
+                <small class="text-muted">
+
+                    {{ session["role"]|capitalize }}
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

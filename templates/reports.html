@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}
+Reports
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/reports.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "components/navbar.html" %}
+
+        {% include "components/portfolio/demo_banner.html" %}
+
+        <div class="reports-container">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h2 class="fw-bold">
+                    <i class="bi bi-bar-chart-fill me-2"></i>
+                    Reports Dashboard
+                </h2>
+
+            </div>
+
+            <!-- Summary -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-md-3">
+                    <div class="summary-card">
+                        <p>Total Products</p>
+                        <h2>{{ total_products }}</h2>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="summary-card">
+                        <p>Total Stock</p>
+                        <h2>{{ total_stock }}</h2>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="summary-card">
+                        <p>Inventory Value</p>
+                        <h2>₱ {{ "{:,.2f}".format(inventory_value) }}</h2>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="summary-card">
+                        <p>Low Stock</p>
+                        <h2>{{ low_stock }}</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Portfolio Information -->
+
+            {% include "components/portfolio/project_info.html" %}
+
+            <!-- Charts -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-lg-5">
+
+                    <div class="report-card">
+
+                        <h5 class="fw-bold mb-3">
+                            📦 Products by Category
+                        </h5>
+
+                        <div class="chart-container" style="height:350px">
+
+                            <canvas id="categoryChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-7">
+
+                    <div class="report-card">
+
+                        <h5 class="fw-bold mb-3">
+                            📊 Current Stock
+                        </h5>
+
+                        <div class="chart-container" style="height:350px">
+
+                            <canvas id="stockChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Product Table -->
+
+            <div class="report-card">
+
+                <h5 class="mb-3">
+
+                    Product Summary
+
+                </h5>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {% if products %}
+
+                            {% for product in products %}
+
+                            <tr>
+
+                                <td>{{ product[0] }}</td>
+
+                                <td>{{ product[1] }}</td>
+
+                                <td>{{ product[5] or "No Category" }}</td>
+
+                                <td>
+                                    ₱ {{ "{:,.2f}".format(product[2] or 0) }}
+                                </td>
+
+                                <td>{{ product[4] or 0 }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="5" class="text-center">
+
+                                    No products found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Report Chart Data -->
+
+<script id="dashboard-data" type="application/json">
+{
+    "categoryLabels": {{ (category_labels or []) | tojson }},
+    "categoryValues": {{ (category_values or []) | tojson }},
+    "stockLabels": {{ (stock_labels or []) | tojson }},
+    "stockValues": {{ (stock_values or []) | tojson }}
+}
+</script>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+{% endblock %}

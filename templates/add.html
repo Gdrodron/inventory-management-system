@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Product
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/add_product.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    {% include "components/sidebar.html" %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Navbar -->
+        {% include "components/navbar.html" %}
+
+        <div class="product-card">
+
+            <h2 class="fw-bold mb-4">
+
+                <i class="bi bi-plus-circle-fill me-2"></i>
+
+                Add Product
+
+            </h2>
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  autocomplete="off">
+
+                <!-- Product Name -->
+                <div class="mb-3">
+
+                    <label for="product_name" class="form-label">
+
+                        Product Name
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="product_name"
+                        name="product_name"
+                        class="form-control"
+                        placeholder="Enter product name"
+                        maxlength="100"
+                        required>
+
+                </div>
+
+                <!-- Category -->
+                <div class="mb-3">
+
+                    <label for="category" class="form-label">
+
+                        Category
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        class="form-control"
+                        placeholder="Enter category"
+                        maxlength="50"
+                        required>
+
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3">
+
+                    <label for="price" class="form-label">
+
+                        Price
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        class="form-control"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                        required>
+
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-4">
+
+                    <label for="quantity" class="form-label">
+
+                        Quantity
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        class="form-control"
+                        placeholder="0"
+                        min="0"
+                        required>
+
+                </div>
+
+                <!-- Product Image -->
+                <div class="mb-4">
+
+                    <label for="image" class="form-label">
+
+                        Product Image
+
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        class="form-control"
+                        accept=".jpg,.jpeg,.png,.webp">
+
+                    <div class="form-text">
+
+                        Supported formats:
+                        JPG, JPEG, PNG, WEBP
+
+                    </div>
+
+                    <img
+                        id="imagePreview"
+                        src="#"
+                        alt="Product Preview"
+                        loading="lazy"
+                        class="img-thumbnail mt-3 d-none"
+                        style="max-width:220px;">
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <i class="bi bi-check-circle-fill me-2"></i>
+
+                        Save Product
+
+                    </button>
+
+                    <a
+                        href="{{ url_for('index') }}"
+                        class="btn btn-outline-secondary">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+
+                        Back to Dashboard
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const imageInput = document.getElementById("image");
+    const preview = document.getElementById("imagePreview");
+
+    if (!imageInput || !preview) return;
+
+    imageInput.addEventListener("change", () => {
+
+        const file = imageInput.files[0];
+
+        if (!file) {
+
+            preview.classList.add("d-none");
+            preview.src = "#";
+
+            return;
+
+        }
+
+        const allowedTypes = [
+
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+
+            alert("Only JPG, PNG, and WEBP images are allowed.");
+
+            imageInput.value = "";
+
+            preview.classList.add("d-none");
+
+            preview.src = "#";
+
+            return;
+
+        }
+
+        preview.src = URL.createObjectURL(file);
+
+        preview.classList.remove("d-none");
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

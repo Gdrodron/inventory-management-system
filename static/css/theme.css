@@ -1,0 +1,84 @@
+/* ===========================
+   Global Theme
+=========================== */
+
+:root{
+
+    --primary:#2563eb;
+    --success:#22c55e;
+    --danger:#ef4444;
+    --warning:#f59e0b;
+
+    --dark:#111827;
+    --light:#f5f7fb;
+    --white:#ffffff;
+
+    --radius:18px;
+
+}
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+html,
+body{
+
+    width:100%;
+    min-height:100%;
+
+}
+
+body{
+
+    font-family:"Poppins",sans-serif;
+
+    background:var(--light);
+
+    color:#1f2937;
+
+    line-height:1.5;
+
+    overflow-x:hidden;
+
+}
+
+a{
+
+    text-decoration:none;
+    color:inherit;
+
+}
+
+img{
+
+    max-width:100%;
+    display:block;
+
+}
+
+button{
+
+    cursor:pointer;
+    font-family:inherit;
+
+}
+
+input,
+select,
+textarea{
+
+    font-family:inherit;
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}

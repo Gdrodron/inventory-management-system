@@ -1,0 +1,65 @@
+<div class="row mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6>Total Transactions</h6>
+
+                <h2>{{ transactions|length }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6>Stock In</h6>
+
+                <h2>
+
+                    {{ transactions
+                    |selectattr(2, "equalto", "STOCK IN")
+                    |list
+                    |length }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6>Stock Out</h6>
+
+                <h2>
+
+                    {{ transactions
+                    |selectattr(2, "equalto", "STOCK OUT")
+                    |list
+                    |length }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

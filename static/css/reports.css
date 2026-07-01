@@ -1,0 +1,199 @@
+/* =====================================
+   REPORTS PAGE
+===================================== */
+
+.reports-container {
+    padding: 30px;
+}
+
+/* =====================================
+   REPORT CARD
+===================================== */
+
+.report-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: .3s ease;
+}
+
+.report-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(0,0,0,.12);
+}
+
+.report-card h5 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 20px;
+}
+
+/* =====================================
+   SUMMARY CARDS
+===================================== */
+
+.summary-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    transition: .3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0,0,0,.12);
+}
+
+.summary-card p {
+    margin: 0;
+    color: #6b7280;
+    font-size: .95rem;
+    font-weight: 500;
+}
+
+.summary-card h2 {
+    margin-top: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+/* =====================================
+   CHARTS
+===================================== */
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 380px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* =====================================
+   TABLE
+===================================== */
+
+.table-responsive {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.table thead {
+    background: #2563eb;
+}
+
+.table thead th {
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 15px;
+}
+
+.table tbody td {
+    padding: 15px;
+}
+
+.table tbody tr {
+    transition: .25s;
+}
+
+.table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* =====================================
+   BADGES
+===================================== */
+
+.badge-low {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: .8rem;
+}
+
+.badge-normal {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: .8rem;
+}
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+.btn-export {
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width:992px){
+
+    .reports-container{
+        padding:20px;
+    }
+
+    .chart-container{
+        height:320px;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .reports-container{
+        padding:15px;
+    }
+
+    .summary-card{
+        padding:20px;
+    }
+
+    .summary-card h2{
+        font-size:1.8rem;
+    }
+
+    .chart-container{
+        height:280px;
+    }
+
+}
+
+@media (max-width:576px){
+
+    .report-card{
+        padding:18px;
+    }
+
+    .summary-card h2{
+        font-size:1.5rem;
+    }
+
+    .chart-container{
+        height:240px;
+    }
+
+}

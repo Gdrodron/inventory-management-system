@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+    <main class="main-content">
+
+        {% include "components/navbar.html" %}
+
+        {% include "components/portfolio/demo_banner.html" %}
+
+        {% include "components/dashboard_cards.html" %}
+
+        {% include "components/portfolio/project_info.html" %}
+
+        {% include "components/search_bar.html" %}
+
+        {% include "components/product_table.html" %}
+
+        {% include "components/chart.html" %}
+
+    </main>
+
+</div>
+
+<!-- Dashboard Chart Data -->
+<script id="dashboard-data" type="application/json">
+{
+    "categoryLabels": {{ (category_labels or []) | tojson }},
+    "categoryValues": {{ (category_values or []) | tojson }},
+    "stockLabels": {{ (stock_labels or []) | tojson }},
+    "stockValues": {{ (stock_values or []) | tojson }}
+}
+</script>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}

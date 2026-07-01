@@ -1,0 +1,166 @@
+/* =========================
+   Transactions Page
+========================= */
+
+.transactions-container {
+    padding: 24px;
+}
+
+/* =========================
+   Transaction Card
+========================= */
+
+.transaction-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.transaction-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.transaction-card h2,
+.transaction-card h4,
+.transaction-card h5 {
+    color: #343a40;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   Table
+========================= */
+
+.table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.table thead {
+    background: #0d6efd;
+    color: #ffffff;
+}
+
+.table thead th {
+    border: none;
+    padding: 14px;
+    font-weight: 600;
+}
+
+.table tbody td {
+    padding: 14px;
+}
+
+.table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* =========================
+   Badges
+========================= */
+
+.badge {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* =========================
+   Buttons
+========================= */
+
+.btn {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Search Box
+========================= */
+
+.search-box {
+    max-width: 350px;
+    margin-bottom: 20px;
+}
+
+.search-box .form-control {
+    border-radius: 10px;
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 992px) {
+
+    .transactions-container {
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .transactions-container {
+        padding: 15px;
+    }
+
+    .transaction-card {
+        padding: 18px;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .table thead th,
+    .table tbody td {
+        padding: 10px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .transaction-card {
+        padding: 15px;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+
+}

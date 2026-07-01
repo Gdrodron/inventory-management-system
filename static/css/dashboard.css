@@ -1,0 +1,420 @@
+/* ==========================================
+   DASHBOARD CSS
+========================================== */
+
+/* =========================
+   LAYOUT
+========================= */
+
+.dashboard-layout{
+    display:flex;
+    min-height:100vh;
+    background:#f5f7fb;
+    font-family:"Poppins",sans-serif;
+    color:#1f2937;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:260px;
+    min-width:260px;
+    min-height:100vh;
+    background:#111827;
+    color:#fff;
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+}
+
+.sidebar-header h3{
+    margin-bottom:5px;
+    font-weight:700;
+}
+
+.sidebar-header p{
+    margin:0;
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.sidebar-menu{
+    list-style:none;
+    padding:0;
+    margin:30px 0;
+}
+
+.sidebar-menu li{
+    margin-bottom:10px;
+}
+
+.sidebar-menu a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 15px;
+    border-radius:12px;
+    color:#d1d5db;
+    transition:.3s ease;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* =========================
+   USER
+========================= */
+
+.sidebar-user{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#2563eb;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:700;
+    font-size:18px;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main-content{
+    flex:1;
+    padding:25px;
+    overflow-x:hidden;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.top-navbar{
+    background:#fff;
+    border-radius:18px;
+    padding:18px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    box-shadow:0 10px 30px rgba(15,23,42,.08);
+}
+
+/* =========================
+   DASHBOARD CARDS
+========================= */
+
+.stat-card{
+    background:#fff;
+    border-radius:18px;
+    padding:20px;
+    min-height:115px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    transition:.3s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 35px rgba(15,23,42,.12);
+}
+
+.stat-card p{
+    margin:0;
+    color:#6b7280;
+    font-size:14px;
+}
+
+.stat-card h3{
+    margin-top:6px;
+    font-size:32px;
+    font-weight:700;
+}
+
+/* =========================
+   ICONS
+========================= */
+
+.icon-box{
+    width:64px;
+    height:64px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:18px;
+    font-size:28px;
+    flex-shrink:0;
+}
+
+.blue{
+    background:#dbeafe;
+    color:#2563eb;
+}
+
+.green{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.yellow{
+    background:#fef3c7;
+    color:#ca8a04;
+}
+
+.red{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box input{
+    height:50px;
+    border-radius:14px;
+    border:1px solid #dee2e6;
+}
+
+.search-box input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.15);
+}
+
+/* =========================
+   PRODUCT / CHART CARDS
+========================= */
+
+.product-card,
+.chart-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    margin-top:25px;
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+    transition:.3s ease;
+}
+
+.product-card:hover,
+.chart-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 35px rgba(15,23,42,.10);
+}
+
+/* =========================
+   CHARTS
+========================= */
+
+.chart-container{
+    position:relative;
+    width:100%;
+    height:360px;
+}
+
+.chart-container canvas{
+    width:100% !important;
+    height:100% !important;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.modern-table{
+    margin-bottom:0;
+}
+
+.modern-table thead th{
+    background:#111827;
+    color:#fff;
+    border:none;
+    padding:15px;
+    font-weight:600;
+}
+
+.modern-table tbody td{
+    padding:16px 15px;
+    vertical-align:middle;
+    border-color:#edf2f7;
+}
+
+.modern-table tbody tr{
+    transition:.2s;
+}
+
+.modern-table tbody tr:hover{
+    background:#eef5ff;
+}
+
+/* =========================
+   PRODUCT IMAGE
+========================= */
+
+.product-image{
+    width:68px;
+    height:68px;
+    border-radius:12px;
+    object-fit:cover;
+    border:1px solid #e5e7eb;
+    background:#fff;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn-sm{
+    width:38px;
+    height:38px;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    padding:0;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge{
+    border-radius:20px;
+    padding:6px 12px;
+    font-size:12px;
+}
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+.notification-menu{
+    width:330px;
+    border:none;
+    border-radius:16px;
+    padding:10px;
+    box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+.notification-menu .dropdown-header{
+    font-weight:700;
+    font-size:15px;
+}
+
+.notification-menu .dropdown-item{
+    border-radius:10px;
+    white-space:normal;
+    padding:12px;
+    transition:.2s;
+}
+
+.notification-menu .dropdown-item:hover{
+    background:#f3f4f6;
+}
+
+.top-navbar .btn-light{
+    width:46px;
+    height:46px;
+    border:none;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#fff;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.top-navbar .btn-light:hover{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:992px){
+
+    .sidebar{
+        width:220px;
+        min-width:220px;
+    }
+
+    .chart-container{
+        height:320px;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .dashboard-layout{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-width:100%;
+        min-height:auto;
+    }
+
+    .sidebar-user{
+        display:none;
+    }
+
+    .main-content{
+        padding:15px;
+    }
+
+    .stat-card{
+        margin-bottom:15px;
+    }
+
+    .product-image{
+        width:55px;
+        height:55px;
+    }
+
+    .chart-container{
+        height:280px;
+    }
+
+}
+
+@media (max-width:576px){
+
+    .main-content{
+        padding:12px;
+    }
+
+    .stat-card{
+        flex-direction:column;
+        text-align:center;
+        gap:12px;
+    }
+
+    .icon-box{
+        margin-bottom:8px;
+    }
+
+    .chart-container{
+        height:240px;
+    }
+
+}

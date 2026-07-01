@@ -1,0 +1,135 @@
+/* ==========================================
+   Add Product Page
+========================================== */
+
+body{
+    background:#f5f7fb;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main Container */
+
+.add-product-page{
+    padding:40px 20px;
+}
+
+/* Card */
+
+.add-product-card{
+    max-width:800px;
+    margin:auto;
+    background:#ffffff;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Header */
+
+.page-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.page-title h2{
+    font-size:32px;
+    font-weight:700;
+    color:#0d6efd;
+    margin-bottom:8px;
+}
+
+.page-title p{
+    color:#6c757d;
+    font-size:15px;
+}
+
+/* Labels */
+
+.form-label{
+    font-weight:600;
+    color:#343a40;
+}
+
+/* Inputs */
+
+.form-control,
+.form-select{
+    border-radius:12px;
+    padding:12px 15px;
+    border:1px solid #ced4da;
+    transition:.3s;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#0d6efd;
+    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+}
+
+/* Textarea */
+
+textarea.form-control{
+    resize:none;
+}
+
+/* Buttons */
+
+.btn-save{
+    background:#0d6efd;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-save:hover{
+    background:#0b5ed7;
+    transform:translateY(-2px);
+}
+
+.btn-cancel{
+    background:#6c757d;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-cancel:hover{
+    background:#5a6268;
+}
+
+/* Animation */
+
+.add-product-card{
+    animation:fadeUp .5s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .add-product-card{
+        padding:25px;
+    }
+
+    .page-title h2{
+        font-size:26px;
+    }
+
+}

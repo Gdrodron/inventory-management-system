@@ -1,0 +1,407 @@
+/* ===========================
+   LOGIN PAGE
+=========================== */
+
+.login-page{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:30px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb 0%,
+        #4f46e5 50%,
+        #7c3aed 100%
+    );
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* ===========================
+   Background Effect
+=========================== */
+
+.login-page::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        radial-gradient(
+            circle at top left,
+            rgba(255,255,255,.18),
+            transparent 45%
+        ),
+
+        radial-gradient(
+            circle at bottom right,
+            rgba(255,255,255,.15),
+            transparent 45%
+        );
+
+    z-index:0;
+
+}
+
+/* Decorative Circles */
+
+.login-page::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+
+    height:350px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
+
+    right:-120px;
+
+    top:120px;
+
+    z-index:0;
+
+}
+
+/* ===========================
+   Login Card
+=========================== */
+
+.login-card{
+
+    position:relative;
+
+    z-index:1;
+
+    width:100%;
+
+    max-width:520px;
+
+    padding:50px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,.15);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.25);
+
+    animation:fadeUp .6s ease;
+
+}
+
+/* ===========================
+   Logo
+=========================== */
+
+.login-logo{
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+}
+
+.login-logo i{
+
+    font-size:60px;
+
+    color:#fff;
+
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.login-header{
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+.login-header h1{
+
+    color:#fff;
+
+    font-size:3rem;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    margin-bottom:12px;
+
+}
+
+.subtitle{
+
+    color:rgba(255,255,255,.90);
+
+    font-size:18px;
+
+    margin:0;
+
+}
+
+/* ===========================
+   Labels
+=========================== */
+
+.form-label{
+
+    color:#fff;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+/* ===========================
+   Input Group
+=========================== */
+
+.input-group{
+
+    margin-bottom:25px;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.10);
+
+}
+
+.input-group-text{
+
+    width:60px;
+
+    background:#f8f9fa;
+
+    border:none;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.input-group-text i{
+
+    font-size:20px;
+
+    color:#666;
+
+}
+
+.form-control{
+
+    height:58px;
+
+    border:none;
+
+    box-shadow:none;
+
+    font-size:17px;
+
+}
+
+.form-control:focus{
+
+    box-shadow:none;
+
+}
+
+/* ===========================
+   Login Button
+=========================== */
+
+.login-btn{
+
+    width:100%;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:14px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#fff;
+
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    transition:.3s;
+
+}
+
+.login-btn:hover{
+
+    transform:translateY(-3px);
+
+    color:#fff;
+
+    box-shadow:0 15px 30px rgba(37,99,235,.35);
+
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.footer-text{
+
+    margin-top:35px;
+
+    text-align:center;
+
+}
+
+.footer-text p{
+
+    color:#fff;
+
+    font-size:20px;
+
+    margin-bottom:5px;
+
+}
+
+.footer-text small{
+
+    color:rgba(255,255,255,.8);
+
+}
+
+/* ===========================
+   Alerts
+=========================== */
+
+.alert{
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+
+}
+
+/* ===========================
+   Animation
+=========================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px){
+
+    .login-card{
+
+        padding:40px 30px;
+
+    }
+
+    .login-header h1{
+
+        font-size:2.4rem;
+
+    }
+
+}
+
+@media (max-width:576px){
+
+    .login-page{
+
+        padding:20px;
+
+    }
+
+    .login-card{
+
+        padding:30px 20px;
+
+    }
+
+    .login-logo i{
+
+        font-size:48px;
+
+    }
+
+    .login-header h1{
+
+        font-size:2rem;
+
+    }
+
+    .subtitle{
+
+        font-size:16px;
+
+    }
+
+    .login-btn{
+
+        font-size:18px;
+
+    }
+
+}

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/login.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/portfolio.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <!-- Logo -->
+        <div class="login-logo">
+            <i class="bi bi-box-seam-fill"></i>
+        </div>
+
+        <!-- Header -->
+        <div class="login-header">
+
+            <h1>
+                Inventory<br>
+                Management<br>
+                System
+            </h1>
+
+            <p class="subtitle">
+                Sign in to access your dashboard
+            </p>
+
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }} text-center mb-3">
+                    {{ message }}
+                </div>
+
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Login Form -->
+        <form method="POST" autocomplete="off">
+
+            <!-- Username -->
+            <div class="mb-4">
+
+                <label for="username" class="form-label">
+                    Username
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-person-fill"></i>
+                    </span>
+
+                    <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required>
+
+                </div>
+
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+
+                <label for="password" class="form-label">
+                    Password
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-lock-fill"></i>
+                    </span>
+
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+            </div>
+
+            <!-- Login Button -->
+            <button
+                type="submit"
+                class="btn login-btn w-100">
+
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Login
+
+            </button>
+
+        </form>
+
+        <!-- Demo Login -->
+        {% include "components/portfolio/demo_login.html" %}
+
+        <!-- Footer -->
+        <div class="footer-text">
+
+            <p>
+                Inventory Management System
+            </p>
+
+            <small>
+                © 2026 All Rights Reserved
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+
+{% endblock %}

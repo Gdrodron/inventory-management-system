@@ -1,0 +1,215 @@
+/* ==========================================
+   PORTFOLIO COMPONENTS
+   Inventory Management System
+========================================== */
+
+/* =========================
+   Portfolio Banner
+========================= */
+
+.portfolio-banner {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
+    transition: all 0.3s ease;
+}
+
+.portfolio-banner:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px rgba(37, 99, 235, 0.35);
+}
+
+.portfolio-banner h3 {
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.portfolio-banner p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    opacity: 0.95;
+}
+
+.portfolio-banner .badge {
+    font-size: 14px;
+    padding: 12px 18px;
+    border-radius: 30px;
+}
+
+/* =========================
+   Demo Login
+========================= */
+
+.demo-login {
+    margin-top: 30px;
+}
+
+.demo-login .alert {
+    border: none;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.demo-login h6 {
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.demo-login p {
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+.demo-login strong {
+    color: #0d6efd;
+}
+
+/* =========================
+   Project Information
+========================= */
+
+.project-info-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.project-info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.project-info-card h4 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #212529;
+}
+
+.project-info-card h6 {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #0d6efd;
+}
+
+.project-info-card ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.project-info-card li {
+    margin-bottom: 10px;
+    color: #495057;
+    line-height: 1.5;
+}
+
+/* =========================
+   Technology Badges
+========================= */
+
+.tech-badge {
+    display: inline-block;
+    background: #e7f1ff;
+    color: #0d6efd;
+    padding: 8px 14px;
+    margin: 4px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.tech-badge:hover {
+    background: #0d6efd;
+    color: #ffffff;
+}
+
+/* =========================
+   Portfolio Buttons
+========================= */
+
+.portfolio-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.portfolio-buttons .btn {
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 600;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 992px) {
+
+    .portfolio-banner {
+        padding: 24px;
+    }
+
+    .project-info-card {
+        padding: 24px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .portfolio-banner {
+        text-align: center;
+    }
+
+    .portfolio-banner h3 {
+        font-size: 1.5rem;
+    }
+
+    .portfolio-banner .d-flex {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .portfolio-buttons {
+        justify-content: center;
+    }
+
+    .project-info-card {
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .portfolio-banner {
+        padding: 20px;
+    }
+
+    .portfolio-banner h3 {
+        font-size: 1.3rem;
+    }
+
+    .portfolio-banner p {
+        font-size: 14px;
+    }
+
+    .demo-login .alert {
+        padding: 16px;
+    }
+
+    .project-info-card {
+        padding: 18px;
+    }
+
+}
