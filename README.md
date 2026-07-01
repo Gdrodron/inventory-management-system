@@ -60,19 +60,23 @@ Inventory_Web_V2/
 
 ### Login
 
-*(Add screenshot here)*
+![Login](login.png)
 
 ### Dashboard
 
-*(Add screenshot here)*
+![Dashborad](dashboard.png)
 
 ### Products
 
-*(Add screenshot here)*
+![Products](product.png)
+
+### Transactions
+
+![Transactions](transactions.png)
 
 ### Reports
 
-*(Add screenshot here)*
+![Reports](reports.png)
 
 ---
 
