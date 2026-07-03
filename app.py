@@ -198,7 +198,7 @@ def index():
                 image,
                 quantity,
                 category
-            FROM inventory.products
+            FROM products
             ORDER BY id
         """)
 
@@ -239,7 +239,7 @@ def index():
             SELECT
                 category,
                 COUNT(*)
-            FROM inventory.products
+            FROM products
             GROUP BY category
             ORDER BY category
         """)
@@ -257,7 +257,7 @@ def index():
             SELECT
                 product_name,
                 quantity
-            FROM inventory.products
+            FROM products
             ORDER BY product_name
         """)
 
@@ -377,7 +377,7 @@ def add_product():
             # =========================
 
             cur.execute("""
-                INSERT INTO inventory.products
+                INSERT INTO products
                 (
                     product_name,
                     price_numeric,
@@ -409,7 +409,7 @@ def add_product():
             # =========================
 
             cur.execute("""
-                INSERT INTO inventory.inventory_transactions
+                INSERT INTO transactions
                 (
                     product_id,
                     transaction_type,
@@ -478,7 +478,7 @@ def edit_product(id):
 
 
             cur.execute("""
-                UPDATE inventory.products
+                UPDATE products
                 SET
                     product_name = %s,
                     price_numeric = %s,
@@ -520,7 +520,7 @@ def edit_product(id):
                 quantity,
                 category
 
-            FROM inventory.products
+            FROM products
 
             WHERE id = %s
 
@@ -575,7 +575,7 @@ def delete_product(id):
 
         cur.execute("""
             SELECT id
-            FROM inventory.products
+            FROM products
             WHERE id = %s
         """, (id,))
 
@@ -595,7 +595,7 @@ def delete_product(id):
         # =========================
 
         cur.execute("""
-            DELETE FROM inventory.inventory_transactions
+            DELETE FROM inventory_transactions
             WHERE product_id = %s
         """, (id,))
 
@@ -604,7 +604,7 @@ def delete_product(id):
         # =========================
 
         cur.execute("""
-            DELETE FROM inventory.products
+            DELETE FROM products
             WHERE id = %s
         """, (id,))
 
@@ -641,7 +641,7 @@ def stock_in(id):
     try:
         cur.execute("""
             SELECT id
-            FROM inventory.products
+            FROM products
             WHERE id = %s
         """, (id,))
 
@@ -652,13 +652,13 @@ def stock_in(id):
             return redirect("/")
 
         cur.execute("""
-            UPDATE inventory.products
+            UPDATE products
             SET quantity = quantity + 1
             WHERE id = %s
         """, (id,))
 
         cur.execute("""
-            INSERT INTO inventory.inventory_transactions
+            INSERT INTO inventory_transactions
             (
                 product_id,
                 transaction_type,
@@ -702,7 +702,7 @@ def stock_out(id):
                 id,
                 quantity
 
-            FROM inventory.products
+            FROM products
 
             WHERE id = %s
 
@@ -743,7 +743,7 @@ def stock_out(id):
         # Decrease stock
 
         cur.execute("""
-            UPDATE inventory.products
+            UPDATE products
 
             SET quantity = quantity - 1
 
@@ -756,7 +756,7 @@ def stock_out(id):
         # Save transaction
 
         cur.execute("""
-            INSERT INTO inventory.inventory_transactions
+            INSERT INTO inventory_transactions
 
             (
                 product_id,
@@ -831,9 +831,9 @@ def export_transactions_excel():
                     t.quantity,
                     t.transaction_date,
                     COALESCE(u.username, 'Demo User')
-                FROM inventory.inventory_transactions t
-                JOIN inventory.products p ON p.id = t.product_id
-                LEFT JOIN inventory.users u ON u.id = t.user_id
+                FROM inventory_transactions t
+                JOIN products p ON p.id = t.product_id
+                LEFT JOIN users u ON u.id = t.user_id
                 ORDER BY t.transaction_date DESC
             """)
 
@@ -899,7 +899,7 @@ def export_products_excel():
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT id, product_name, price_numeric, quantity, category
-                FROM inventory.products
+                FROM products
                 ORDER BY id
             """)
 
@@ -958,9 +958,9 @@ def transactions():
                 t.quantity,
                 t.transaction_date,
                 COALESCE(u.username, 'Demo User') AS username
-            FROM inventory.inventory_transactions t
-            JOIN inventory.products p ON p.id = t.product_id
-            LEFT JOIN inventory.users u ON u.id = t.user_id
+            FROM inventory_transactions t
+            JOIN products p ON p.id = t.product_id
+            LEFT JOIN users u ON u.id = t.user_id
             ORDER BY t.transaction_date DESC
         """)
 
@@ -1003,7 +1003,7 @@ def reports():
                 category
 
 
-            FROM inventory.products
+            FROM products
 
 
             ORDER BY id
@@ -1058,7 +1058,7 @@ def reports():
                 COUNT(*)
 
 
-            FROM inventory.products
+            FROM products
 
 
             GROUP BY category
@@ -1084,7 +1084,7 @@ def reports():
                 quantity
 
 
-            FROM inventory.products
+            FROM products
 
 
             ORDER BY product_name
