@@ -55,20 +55,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # DATABASE
 # =========================
 
-conn = psycopg2.connect(
-
-    host=os.getenv("DB_HOST"),
-
-    database=os.getenv("DB_NAME"),
-
-    user=os.getenv("DB_USER"),
-
-    password=os.getenv("DB_PASSWORD"),
-
-    port=os.getenv("DB_PORT")
-
-)
-
+conn = psycopg2.connect(os.environ["DATABASE_URL"])
 conn.autocommit = True
 
 # =========================
@@ -142,7 +129,7 @@ def login():
 
             cur.execute("""
                 SELECT id, username, password, role
-                FROM inventory.users
+                FROM users
                 WHERE LOWER(username) = %s
             """, (username,))
 
