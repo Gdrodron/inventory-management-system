@@ -117,16 +117,11 @@ def login():
         username = request.form.get("username", "").strip().lower()
         password = request.form.get("password", "")
 
-
-
-        # =========================
-        # DATABASE LOGIN
-        # =========================
+        print("Username entered:", username)
 
         cur = conn.cursor()
 
         try:
-
             cur.execute("""
                 SELECT id, username, password, role
                 FROM users
@@ -134,27 +129,26 @@ def login():
             """, (username,))
 
             user = cur.fetchone()
+            print("User:", user)
 
         finally:
             cur.close()
 
         if user:
+            db_password = (user[2] or "").strip()
 
-            db_password = user[2]
+            print("DB Password:", db_password)
+            print("Entered Password:", password)
 
-            try:
-                password_ok = check_password_hash(db_password, password)
-            except Exception:
-                password_ok = (db_password == password)
+            password_ok = (db_password == password.strip())
+
+            print("Password OK:", password_ok)
 
             if password_ok:
-
                 session.clear()
-
                 session["user_id"] = user[0]
                 session["username"] = user[1]
                 session["role"] = (user[3] or "").lower()
-
                 flash("Welcome back!", "success")
                 return redirect("/")
 
