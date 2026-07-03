@@ -1,11 +1,29 @@
-from flask import Flask, render_template, session, request, redirect, flash
+from flask import (
+    Flask,
+    render_template,
+    session,
+    request,
+    redirect,
+    flash,
+    url_for,
+    send_file
+)
+
 from dotenv import load_dotenv
+
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
+
 from functools import wraps
+
+from io import BytesIO
+
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.utils import get_column_letter
+
 import psycopg2
 import os
-
 
 # =========================
 # ENV
@@ -53,46 +71,48 @@ conn = psycopg2.connect(
 
 conn.autocommit = True
 
+# =========================
+# ROLE REQUIRED
+# =========================
+
+def role_required(*roles):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+
+            if "user_id" not in session:
+                return redirect(url_for("login"))
+
+            user_role = (session.get("role") or "").lower()
+            allowed = [r.lower() for r in roles]
+
+            if user_role not in allowed:
+                flash(
+                    "You don't have permission to access this page.",
+                    "warning"
+                )
+                return render_template("errors/403.html"), 403
+
+            return f(*args, **kwargs)
+
+        return wrapper
+    return decorator
+
 
 # =========================
 # LOGIN REQUIRED
 # =========================
 
 def login_required(f):
-
     @wraps(f)
-    def decorated(*args, **kwargs):
+    def decorated_function(*args, **kwargs):
 
         if "user_id" not in session:
-            return redirect("/login")
+            return redirect(url_for("login"))
 
         return f(*args, **kwargs)
 
-    return decorated
-
-# =========================
-# ROLE REQUIRED
-# =========================
-
-def role_required(*roles):
-
-    def decorator(f):
-
-        @wraps(f)
-        def decorated(*args, **kwargs):
-
-            if "role" not in session:
-                flash("Please login first.", "warning")
-                return redirect("/login")
-
-            if session.get("role", "").lower() not in [r.lower() for r in roles]:
-                return render_template("errors/403.html"), 403
-
-            return f(*args, **kwargs)
-
-        return decorated
-
-    return decorator
+    return decorated_function
 
 
 # =========================
@@ -102,27 +122,28 @@ def role_required(*roles):
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-    # If user is already logged in
-    if "user_id" in session:
+    if session.get("user_id"):
         return redirect("/")
 
     if request.method == "POST":
 
-        username = request.form.get("username", "").strip()
+        username = request.form.get("username", "").strip().lower()
         password = request.form.get("password", "")
+
+
+
+        # =========================
+        # DATABASE LOGIN
+        # =========================
 
         cur = conn.cursor()
 
         try:
 
             cur.execute("""
-                SELECT
-                    id,
-                    username,
-                    password,
-                    role
-                FROM Inventory.users
-                WHERE username = %s
+                SELECT id, username, password, role
+                FROM inventory.users
+                WHERE LOWER(username) = %s
             """, (username,))
 
             user = cur.fetchone()
@@ -130,17 +151,25 @@ def login():
         finally:
             cur.close()
 
-        if user and check_password_hash(user[2], password):
+        if user:
 
-            session.clear()
+            db_password = user[2]
 
-            session["user_id"] = user[0]
-            session["user"] = user[1]
-            session["role"] = (user[3] or "").strip().lower()
+            try:
+                password_ok = check_password_hash(db_password, password)
+            except Exception:
+                password_ok = (db_password == password)
 
-            flash("Welcome back!", "success")
+            if password_ok:
 
-            return redirect("/")
+                session.clear()
+
+                session["user_id"] = user[0]
+                session["username"] = user[1]
+                session["role"] = (user[3] or "").lower()
+
+                flash("Welcome back!", "success")
+                return redirect("/")
 
         flash("Invalid username or password.", "danger")
 
@@ -179,6 +208,7 @@ def index():
         # =========================
         # PRODUCTS
         # =========================
+
         cur.execute("""
             SELECT
                 id,
@@ -187,7 +217,7 @@ def index():
                 image,
                 quantity,
                 category
-            FROM Inventory.products
+            FROM inventory.products
             ORDER BY id
         """)
 
@@ -197,6 +227,7 @@ def index():
         # =========================
         # DASHBOARD CARDS
         # =========================
+
         total_products = len(products)
 
         total_stock = sum(
@@ -204,10 +235,12 @@ def index():
             for product in products
         )
 
+
         inventory_value = sum(
             float(product[2] or 0) * (product[4] or 0)
             for product in products
         )
+
 
         low_stock = sum(
             1
@@ -220,11 +253,12 @@ def index():
         # PIE CHART
         # Products per Category
         # =========================
+
         cur.execute("""
             SELECT
                 category,
                 COUNT(*)
-            FROM Inventory.products
+            FROM inventory.products
             GROUP BY category
             ORDER BY category
         """)
@@ -232,15 +266,17 @@ def index():
         category_data = cur.fetchall()
 
 
+
         # =========================
         # BAR CHART
         # Stock per Product
         # =========================
+
         cur.execute("""
             SELECT
                 product_name,
                 quantity
-            FROM Inventory.products
+            FROM inventory.products
             ORDER BY product_name
         """)
 
@@ -251,10 +287,12 @@ def index():
         # =========================
         # CHART DATA
         # =========================
+
         category_labels = [
             row[0] or "No Category"
             for row in category_data
         ]
+
 
         category_values = [
             row[1]
@@ -267,15 +305,18 @@ def index():
             for row in stock_data
         ]
 
+
         stock_values = [
             row[1] or 0
             for row in stock_data
         ]
 
 
+
         # =========================
         # RENDER
         # =========================
+
         return render_template(
             "index.html",
 
@@ -295,14 +336,20 @@ def index():
 
 
     finally:
+
         cur.close()
-        
+
+
 # =========================
 # ADD PRODUCT
 # =========================
 
-@app.route("/add", methods=["GET","POST"])
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+@role_required("admin")
 def add_product():
+
+    
 
     if request.method == "POST":
 
@@ -311,14 +358,23 @@ def add_product():
         price = request.form["price"]
         quantity = request.form["quantity"]
 
-        # Image Upload
+
+        # =========================
+        # IMAGE UPLOAD
+        # =========================
+
         image = request.files.get("image")
+
 
         if image and image.filename != "":
 
             filename = secure_filename(image.filename)
+
             image.save(
-                os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                os.path.join(
+                    app.config["UPLOAD_FOLDER"],
+                    filename
+                )
             )
 
             image_filename = filename
@@ -327,79 +383,111 @@ def add_product():
 
             image_filename = None
 
+
+
         cur = conn.cursor()
 
-        cur.execute("""
-            INSERT INTO Inventory.products
+
+        try:
+
+
+            # =========================
+            # INSERT PRODUCT
+            # =========================
+
+            cur.execute("""
+                INSERT INTO inventory.products
+                (
+                    product_name,
+                    price_numeric,
+                    image,
+                    quantity,
+                    category
+                )
+
+                VALUES (%s,%s,%s,%s,%s)
+
+                RETURNING id
+
+            """,
             (
-                product_name,
-                price_numeric,
-                image,
+                name,
+                price,
+                image_filename,
                 quantity,
                 category
-            )
-            VALUES (%s,%s,%s,%s,%s)
-            RETURNING id
-        """,
-        (
-            name,
-            price,
-            image_filename,
-            quantity,
-            category
-        ))
+            ))
 
-        product_id = cur.fetchone()[0]
 
-        cur.execute("""
-            INSERT INTO Inventory.inventory_transactions
+            product_id = cur.fetchone()[0]
+
+
+
+            # =========================
+            # SAVE TRANSACTION
+            # =========================
+
+            cur.execute("""
+                INSERT INTO inventory.inventory_transactions
+                (
+                    product_id,
+                    transaction_type,
+                    quantity,
+                    user_id
+                )
+
+                VALUES
+                (
+                    %s,
+                    'ADD PRODUCT',
+                    %s,
+                    %s
+                )
+
+            """,
             (
                 product_id,
-                transaction_type,
                 quantity,
-                user_id
-            )
-            VALUES
-            (
-                %s,
-                'ADD PRODUCT',
-                %s,
-                %s
-            )
-        """,
-        (
-            product_id,
-            quantity,
-            session["user_id"]
-        ))
+                session["user_id"]
+            ))
 
-        cur.close()
 
-        flash(
-            "Product added successfully!",
-            "success"
-        )
+
+            flash(
+                "Product added successfully!",
+                "success"
+            )
+
+
+        finally:
+
+            cur.close()
+
 
         return redirect("/")
 
+
     return render_template("add.html")
+
 
 # =========================
 # EDIT PRODUCT
 # =========================
 
-@app.route("/edit/<int:id>", methods=["GET","POST"])
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
 @login_required
-@role_required("Admin")
+@role_required("admin")
 def edit_product(id):
 
     cur = conn.cursor()
 
     try:
 
+
         # =========================
         # UPDATE PRODUCT
         # =========================
+
         if request.method == "POST":
 
             name = request.form.get("product_name", "").strip()
@@ -407,14 +495,17 @@ def edit_product(id):
             price = request.form.get("price", 0)
             quantity = request.form.get("quantity", 0)
 
+
             cur.execute("""
-                UPDATE Inventory.products
+                UPDATE inventory.products
                 SET
                     product_name = %s,
                     price_numeric = %s,
                     quantity = %s,
                     category = %s
+
                 WHERE id = %s
+
             """,
             (
                 name,
@@ -424,46 +515,65 @@ def edit_product(id):
                 id
             ))
 
+
             flash(
                 "Product updated successfully!",
                 "success"
             )
 
+
             return redirect("/")
+
+
 
         # =========================
         # LOAD PRODUCT
         # =========================
+
         cur.execute("""
             SELECT
+
                 id,
                 product_name,
                 price_numeric,
                 quantity,
                 category
-            FROM Inventory.products
+
+            FROM inventory.products
+
             WHERE id = %s
+
         """, (id,))
+
 
         product = cur.fetchone()
 
+
+
         if not product:
+
 
             flash(
                 "Product not found.",
                 "danger"
             )
 
+
             return redirect("/")
+
+
 
         return render_template(
             "edit.html",
             product=product
         )
 
+
+
     finally:
 
         cur.close()
+
 
 # =========================
 # DELETE PRODUCT
@@ -471,17 +581,20 @@ def edit_product(id):
 
 @app.route("/delete/<int:id>", methods=["POST"])
 @login_required
-@role_required("Admin")
+@role_required("admin")
 def delete_product(id):
 
     cur = conn.cursor()
 
     try:
 
-        # Check if product exists
+        # =========================
+        # CHECK PRODUCT
+        # =========================
+
         cur.execute("""
             SELECT id
-            FROM Inventory.products
+            FROM inventory.products
             WHERE id = %s
         """, (id,))
 
@@ -496,15 +609,34 @@ def delete_product(id):
 
             return redirect("/")
 
-        # Delete product
+        # =========================
+        # DELETE TRANSACTION HISTORY
+        # =========================
+
         cur.execute("""
-            DELETE FROM Inventory.products
+            DELETE FROM inventory.inventory_transactions
+            WHERE product_id = %s
+        """, (id,))
+
+        # =========================
+        # DELETE PRODUCT
+        # =========================
+
+        cur.execute("""
+            DELETE FROM inventory.products
             WHERE id = %s
         """, (id,))
 
         flash(
             "Product deleted successfully!",
             "success"
+        )
+
+    except psycopg2.Error as e:
+
+        flash(
+            f"Database Error: {e.pgerror or str(e)}",
+            "danger"
         )
 
     finally:
@@ -520,67 +652,50 @@ def delete_product(id):
 
 @app.route("/stock-in/<int:id>", methods=["POST"])
 @login_required
-@role_required("Admin")
+@role_required("admin")
 def stock_in(id):
 
     cur = conn.cursor()
 
     try:
-
-        # Check if product exists
         cur.execute("""
             SELECT id
-            FROM Inventory.products
+            FROM inventory.products
             WHERE id = %s
         """, (id,))
 
         product = cur.fetchone()
 
         if not product:
-
-            flash(
-                "Product not found.",
-                "danger"
-            )
-
+            flash("Product not found.", "danger")
             return redirect("/")
 
-        # Increase stock
         cur.execute("""
-            UPDATE Inventory.products
+            UPDATE inventory.products
             SET quantity = quantity + 1
             WHERE id = %s
         """, (id,))
 
-        # Save transaction
         cur.execute("""
-            INSERT INTO Inventory.inventory_transactions
+            INSERT INTO inventory.inventory_transactions
             (
                 product_id,
                 transaction_type,
                 quantity,
                 user_id
             )
-            VALUES
-            (
-                %s,
-                'STOCK IN',
-                1,
-                %s
-            )
-        """,
-        (
-            id,
-            session["user_id"]
-        ))
+            VALUES (%s,'STOCK IN',1,%s)
+        """, (id, session["user_id"]))
 
-        flash(
-            "Stock added successfully!",
-            "success"
-        )
+        flash("Stock added successfully!", "success")
+
+    except Exception as e:
+        print("=" * 60)
+        print(e)
+        print("=" * 60)
+        raise
 
     finally:
-
         cur.close()
 
     return redirect("/")
@@ -591,25 +706,35 @@ def stock_in(id):
 
 @app.route("/stock-out/<int:id>", methods=["POST"])
 @login_required
-@role_required("Admin")
+@role_required("admin")
 def stock_out(id):
 
     cur = conn.cursor()
 
     try:
 
-        # Check if product exists
+
+        # Check product
+
         cur.execute("""
             SELECT
                 id,
                 quantity
-            FROM Inventory.products
+
+            FROM inventory.products
+
             WHERE id = %s
+
         """, (id,))
+
+
 
         product = cur.fetchone()
 
+
+
         if not product:
+
 
             flash(
                 "Product not found.",
@@ -618,8 +743,12 @@ def stock_out(id):
 
             return redirect("/")
 
-        # Check if stock is available
+
+
+        # Check stock
+
         if product[1] <= 0:
+
 
             flash(
                 "No stock available to deduct.",
@@ -628,45 +757,205 @@ def stock_out(id):
 
             return redirect("/")
 
+
+
         # Decrease stock
+
         cur.execute("""
-            UPDATE Inventory.products
+            UPDATE inventory.products
+
             SET quantity = quantity - 1
+
             WHERE id = %s
+
         """, (id,))
 
+
+
         # Save transaction
+
         cur.execute("""
-            INSERT INTO Inventory.inventory_transactions
+            INSERT INTO inventory.inventory_transactions
+
             (
                 product_id,
                 transaction_type,
                 quantity,
                 user_id
             )
+
             VALUES
+
             (
                 %s,
                 'STOCK OUT',
                 1,
                 %s
             )
+
         """,
         (
             id,
             session["user_id"]
         ))
 
+
+
         flash(
             "Stock deducted successfully!",
             "success"
         )
 
+
+
     finally:
 
         cur.close()
 
+
+
     return redirect("/")
+
+
+# =========================
+# EXPORT TRANSACTIONS EXCEL
+# =========================
+
+@app.route("/transactions/export")
+@login_required
+@role_required("admin")
+def export_transactions_excel():
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Transactions"
+
+    headers = ["ID", "Product", "Type", "Quantity", "Date", "User"]
+    ws.append(headers)
+
+    # Style header
+    for col in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=col)
+        cell.font = Font(bold=True)
+        cell.fill = PatternFill("solid", fgColor="1F4E79")
+        cell.alignment = Alignment(horizontal="center")
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT
+                    t.id,
+                    p.product_name,
+                    t.transaction_type,
+                    t.quantity,
+                    t.transaction_date,
+                    COALESCE(u.username, 'Demo User')
+                FROM inventory.inventory_transactions t
+                JOIN inventory.products p ON p.id = t.product_id
+                LEFT JOIN inventory.users u ON u.id = t.user_id
+                ORDER BY t.transaction_date DESC
+            """)
+
+            rows = cur.fetchall()
+
+        for r in rows:
+            ws.append([
+                r[0],
+                r[1],
+                r[2],
+                r[3],
+                r[4].strftime("%Y-%m-%d %H:%M:%S") if r[4] else "",
+                r[5]
+            ])
+
+    except Exception as e:
+        flash(f"Export error: {str(e)}", "danger")
+        return redirect(url_for("transactions"))
+
+    # Auto width
+    for col in ws.columns:
+        max_len = 0
+        col_letter = get_column_letter(col[0].column)
+        for cell in col:
+            if cell.value:
+                max_len = max(max_len, len(str(cell.value)))
+        ws.column_dimensions[col_letter].width = max_len + 2
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="transactions.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    
+# =========================
+# EXPORT PRODUCTS EXCEL
+# =========================
+
+@app.route("/products/export")
+@login_required
+@role_required("admin")
+def export_products_excel():
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Products"
+
+    headers = ["ID", "Product", "Price", "Quantity", "Category"]
+    ws.append(headers)
+
+    for col in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=col)
+        cell.font = Font(bold=True)
+        cell.fill = PatternFill("solid", fgColor="2E7D32")
+        cell.alignment = Alignment(horizontal="center")
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT id, product_name, price_numeric, quantity, category
+                FROM inventory.products
+                ORDER BY id
+            """)
+
+            rows = cur.fetchall()
+
+        for r in rows:
+            ws.append([
+                r[0],
+                r[1],
+                r[2],
+                r[3],
+                r[4]
+            ])
+
+    except Exception as e:
+        flash(f"Export error: {str(e)}", "danger")
+        return redirect(url_for("index"))
+
+    # Auto width
+    for col in ws.columns:
+        max_len = 0
+        col_letter = get_column_letter(col[0].column)
+        for cell in col:
+            if cell.value:
+                max_len = max(max_len, len(str(cell.value)))
+        ws.column_dimensions[col_letter].width = max_len + 2
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="products.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 # =========================
 # TRANSACTIONS
@@ -674,41 +963,35 @@ def stock_out(id):
 
 @app.route("/transactions")
 @login_required
+@role_required("admin", "staff", "demo")
 def transactions():
 
     cur = conn.cursor()
 
-    cur.execute("""
-        SELECT
+    try:
+        cur.execute("""
+            SELECT
+                t.id,
+                p.product_name,
+                t.transaction_type,
+                t.quantity,
+                t.transaction_date,
+                COALESCE(u.username, 'Demo User') AS username
+            FROM inventory.inventory_transactions t
+            JOIN inventory.products p ON p.id = t.product_id
+            LEFT JOIN inventory.users u ON u.id = t.user_id
+            ORDER BY t.transaction_date DESC
+        """)
 
-            t.id,
-            p.product_name,
-            t.transaction_type,
-            t.quantity,
-            t.transaction_date,
-            u.username
+        rows = cur.fetchall()
 
-        FROM Inventory.inventory_transactions t
-
-        JOIN Inventory.products p
-            ON p.id = t.product_id
-
-        JOIN Inventory.users u
-            ON u.id = t.user_id
-
-        ORDER BY t.transaction_date DESC
-
-    """)
-
-    transactions = cur.fetchall()
-
-    cur.close()
+    finally:
+        cur.close()
 
     return render_template(
         "transactions.html",
-        transactions=transactions
+        transactions=rows
     )
-
 
 # =========================
 # REPORTS
@@ -720,90 +1003,176 @@ def reports():
 
     cur = conn.cursor()
 
+
     try:
 
-        # Products
+
+        # =========================
+        # PRODUCTS
+        # =========================
+
         cur.execute("""
             SELECT
+
                 id,
                 product_name,
                 price_numeric,
                 image,
                 quantity,
                 category
-            FROM Inventory.products
+
+
+            FROM inventory.products
+
+
             ORDER BY id
+
         """)
+
 
         products = cur.fetchall()
 
-        # Summary
+
+
+        # =========================
+        # SUMMARY
+        # =========================
+
+
         total_products = len(products)
 
-        total_stock = sum(p[4] or 0 for p in products)
+
+        total_stock = sum(
+            p[4] or 0
+            for p in products
+        )
+
 
         inventory_value = sum(
             float(p[2] or 0) * (p[4] or 0)
+
             for p in products
         )
+
 
         low_stock = sum(
             1
+
             for p in products
+
             if (p[4] or 0) <= 5
+
         )
 
-        # Pie Chart
+
+
+        # =========================
+        # PIE CHART
+        # =========================
+
         cur.execute("""
             SELECT
+
                 category,
                 COUNT(*)
-            FROM Inventory.products
+
+
+            FROM inventory.products
+
+
             GROUP BY category
+
+
             ORDER BY category
+
         """)
+
 
         category_data = cur.fetchall()
 
-        # Bar Chart
+
+
+        # =========================
+        # BAR CHART
+        # =========================
+
         cur.execute("""
             SELECT
+
                 product_name,
                 quantity
-            FROM Inventory.products
+
+
+            FROM inventory.products
+
+
             ORDER BY product_name
+
         """)
+
 
         stock_data = cur.fetchall()
 
-        category_labels = [r[0] or "No Category" for r in category_data]
-        category_values = [r[1] for r in category_data]
 
-        stock_labels = [r[0] for r in stock_data]
-        stock_values = [r[1] or 0 for r in stock_data]
+
+        category_labels = [
+            r[0] or "No Category"
+
+            for r in category_data
+        ]
+
+
+        category_values = [
+            r[1]
+
+            for r in category_data
+        ]
+
+
+
+        stock_labels = [
+            r[0]
+
+            for r in stock_data
+        ]
+
+
+        stock_values = [
+            r[1] or 0
+
+            for r in stock_data
+        ]
+
+
 
         return render_template(
 
             "reports.html",
 
+
             products=products,
+
 
             total_products=total_products,
             total_stock=total_stock,
             inventory_value=inventory_value,
             low_stock=low_stock,
 
+
             category_labels=category_labels,
             category_values=category_values,
+
 
             stock_labels=stock_labels,
             stock_values=stock_values
 
         )
 
-    finally:
-        cur.close()
 
+
+    finally:
+
+        cur.close()
 
 # =========================
 # ERROR PAGES
@@ -828,7 +1197,6 @@ def server_error(error):
 # =========================
 
 if __name__ == "__main__":
-
     app.run(
         host="0.0.0.0",
         port=5000,

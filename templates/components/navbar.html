@@ -9,7 +9,7 @@
 
         <small class="text-muted">
             Welcome back,
-            {{ session["user"] }}
+            {{ session.get("username", "User") }}
         </small>
 
     </div>
@@ -29,9 +29,7 @@
                 <i class="bi bi-bell fs-5"></i>
 
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-
-                    {{ notifications|length }}
-
+                    {{ notifications|default([])|length }}
                 </span>
 
             </button>
@@ -44,12 +42,11 @@
 
                 <li><hr class="dropdown-divider"></li>
 
-                {% if notifications %}
+                {% if notifications|default([]) %}
 
                     {% for item in notifications %}
 
                     <li>
-
                         <a href="#" class="dropdown-item">
 
                             <strong>{{ item.title }}</strong>
@@ -57,13 +54,10 @@
                             <br>
 
                             <small class="text-muted">
-
                                 {{ item.message }}
-
                             </small>
 
                         </a>
-
                     </li>
 
                     {% if not loop.last %}
@@ -75,15 +69,10 @@
                 {% else %}
 
                     <li>
-
                         <span class="dropdown-item text-center text-muted">
-
                             <i class="bi bi-bell-slash"></i>
-
                             No notifications
-
                         </span>
-
                     </li>
 
                 {% endif %}
@@ -93,29 +82,22 @@
         </div>
 
         <!-- Profile -->
-
         <div class="d-flex align-items-center">
 
             <div class="avatar me-2">
-
-                {{ session["user"][0]|upper }}
-
+                {{ session.get("username", "U")[0]|upper }}
             </div>
 
             <div>
 
                 <strong>
-
-                    {{ session["user"] }}
-
+                    {{ session.get("username", "User") }}
                 </strong>
 
                 <br>
 
                 <small class="text-muted">
-
-                    {{ session["role"]|capitalize }}
-
+                    {{ session.get("role", "User")|capitalize }}
                 </small>
 
             </div>

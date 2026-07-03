@@ -9,9 +9,6 @@ Login
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/login.css') }}">
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/portfolio.css') }}">
-
 {% endblock %}
 
 {% block content %}
@@ -22,35 +19,47 @@ Login
 
         <!-- Logo -->
         <div class="login-logo">
+
             <i class="bi bi-box-seam-fill"></i>
+
         </div>
 
         <!-- Header -->
         <div class="login-header">
 
             <h1>
+
                 Inventory<br>
                 Management<br>
                 System
+
             </h1>
 
             <p class="subtitle">
+
                 Sign in to access your dashboard
+
             </p>
 
         </div>
 
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
+
             {% if messages %}
+
                 {% for category, message in messages %}
 
-                <div class="alert alert-{{ category }} text-center mb-3">
-                    {{ message }}
-                </div>
+                    <div class="alert alert-{{ category }} text-center mb-3">
+
+                        {{ message }}
+
+                    </div>
 
                 {% endfor %}
+
             {% endif %}
+
         {% endwith %}
 
         <!-- Login Form -->
@@ -60,13 +69,17 @@ Login
             <div class="mb-4">
 
                 <label for="username" class="form-label">
+
                     Username
+
                 </label>
 
                 <div class="input-group">
 
                     <span class="input-group-text">
+
                         <i class="bi bi-person-fill"></i>
+
                     </span>
 
                     <input
@@ -86,13 +99,17 @@ Login
             <div class="mb-4">
 
                 <label for="password" class="form-label">
+
                     Password
+
                 </label>
 
                 <div class="input-group">
 
                     <span class="input-group-text">
+
                         <i class="bi bi-lock-fill"></i>
+
                     </span>
 
                     <input
@@ -114,24 +131,101 @@ Login
                 class="btn login-btn w-100">
 
                 <i class="bi bi-box-arrow-in-right me-2"></i>
+
                 Login
 
             </button>
 
         </form>
 
-        <!-- Demo Login -->
-        {% include "components/portfolio/demo_login.html" %}
+        <!-- Demo Recruiter Access -->
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold text-center mb-3">
+
+                    <i class="bi bi-person-badge-fill text-primary me-2"></i>
+
+                    Demo Recruiter Access
+
+                </h5>
+
+                <p class="text-muted text-center mb-3">
+
+                    Explore the Inventory Management System in
+                    <strong>read-only mode</strong>.
+
+                </p>
+
+                <div class="row text-center mb-3">
+
+                    <div class="col-6">
+
+                        <small class="text-muted d-block">
+
+                            Username
+
+                        </small>
+
+                        <code class="fs-6">
+
+                            demo
+
+                        </code>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-muted d-block">
+
+                            Password
+
+                        </small>
+
+                        <code class="fs-6">
+
+                            demo123
+
+                        </code>
+
+                    </div>
+
+                </div>
+
+                <div class="alert alert-warning text-center mb-0">
+
+                    <i class="bi bi-eye-fill me-2"></i>
+
+                    Demo accounts can browse the system but cannot
+                    add, edit, delete, or update inventory.
+
+                </div>
+
+            </div>
+
+        </div>
 
         <!-- Footer -->
-        <div class="footer-text">
+        <div class="footer-text mt-4">
 
-            <p>
-                Inventory Management System
+            <p class="mb-1">
+
+                <strong>Inventory Management System</strong>
+
             </p>
 
-            <small>
+            <small class="text-muted d-block">
+
+                Developed by <strong>Rodron Camangyan</strong>
+
+            </small>    
+
+            <small class="text-muted">
+
                 © 2026 All Rights Reserved
+
             </small>
 
         </div>
@@ -139,11 +233,5 @@ Login
     </div>
 
 </div>
-
-{% endblock %}
-
-{% block js %}
-
-<script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
 
 {% endblock %}

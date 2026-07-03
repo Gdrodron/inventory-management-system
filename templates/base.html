@@ -19,7 +19,7 @@
         {% endblock %}
     </title>
 
-    <!-- Google Font -->
+    <!-- Google Fonts -->
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com">
@@ -43,17 +43,20 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
         rel="stylesheet">
 
-    <!-- Global Theme -->
+    <!-- Global CSS -->
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/theme.css') }}">
 
-    <!-- Page CSS -->
+    <!-- Extra CSS -->
     {% block css %}
     {% endblock %}
 
     <!-- Favicon -->
     {% block favicon %}
+    <link
+        rel="icon"
+        href="{{ url_for('static', filename='favicon.ico') }}">
     {% endblock %}
 
 </head>
@@ -66,7 +69,7 @@
     <!-- Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Page JS -->
+    <!-- Extra JavaScript -->
     {% block js %}
     {% endblock %}
 

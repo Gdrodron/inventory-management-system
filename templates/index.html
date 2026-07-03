@@ -5,10 +5,8 @@ Dashboard
 {% endblock %}
 
 {% block css %}
-
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/dashboard.css') }}">
-
 {% endblock %}
 
 {% block content %}
@@ -20,8 +18,6 @@ Dashboard
     <main class="main-content">
 
         {% include "components/navbar.html" %}
-
-        {% include "components/portfolio/demo_banner.html" %}
 
         {% include "components/dashboard_cards.html" %}
 
@@ -40,10 +36,10 @@ Dashboard
 <!-- Dashboard Chart Data -->
 <script id="dashboard-data" type="application/json">
 {
-    "categoryLabels": {{ (category_labels or []) | tojson }},
-    "categoryValues": {{ (category_values or []) | tojson }},
-    "stockLabels": {{ (stock_labels or []) | tojson }},
-    "stockValues": {{ (stock_values or []) | tojson }}
+    "categoryLabels": {{ category_labels|default([])|tojson }},
+    "categoryValues": {{ category_values|default([])|tojson }},
+    "stockLabels": {{ stock_labels|default([])|tojson }},
+    "stockValues": {{ stock_values|default([])|tojson }}
 }
 </script>
 

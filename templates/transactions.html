@@ -31,38 +31,95 @@ Transactions
 
             <div class="transaction-card">
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
-                    <h2 class="fw-bold mb-0">
+                    <div>
 
-                        <i class="bi bi-clock-history me-2"></i>
+                        <h2 class="fw-bold mb-1">
 
-                        Inventory Transactions
+                            <i class="bi bi-clock-history me-2"></i>
 
-                    </h2>
+                            Inventory Transactions
 
-                    <span class="badge bg-primary">
+                        </h2>
 
-                        {{ transactions|length }} Records
+                        {% if session.get("role", "").lower() == "demo" %}
 
-                    </span>
+                            <span class="badge bg-warning text-dark">
+
+                                <i class="bi bi-eye-fill me-1"></i>
+
+                                Demo Mode • Read Only
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                        <span class="badge bg-primary">
+
+                            {{ transactions|length }}
+                            Record{{ "s" if transactions|length != 1 else "" }}
+
+                        </span>
+
+                        {% if session.get("role", "").lower() == "admin" %}
+
+                            <a
+                                href="{{ url_for('export_transactions_excel') }}"
+                                class="btn btn-success">
+
+                                <i class="bi bi-file-earmark-excel me-2"></i>
+
+                                Export Excel
+
+                            </a>
+
+                        {% else %}
+
+                            <button
+                                class="btn btn-success"
+                                disabled
+                                title="Available only for Administrator">
+
+                                <i class="bi bi-file-earmark-excel me-2"></i>
+
+                                Export Excel
+
+                            </button>
+
+                        {% endif %}
+
+                    </div>
 
                 </div>
 
                 <!-- Search -->
+                <div class="search-box mb-4">
 
-                <div class="search-box mb-3">
+                    <div class="input-group">
 
-                    <input
-                        type="text"
-                        id="transactionSearch"
-                        class="form-control"
-                        placeholder="Search transactions...">
+                        <span class="input-group-text">
+
+                            <i class="bi bi-search"></i>
+
+                        </span>
+
+                        <input
+                            type="text"
+                            id="transactionSearch"
+                            class="form-control"
+                            placeholder="Search transactions...">
+
+                    </div>
 
                 </div>
 
                 <!-- Table -->
-
                 <div class="table-responsive">
 
                     <table
@@ -74,15 +131,10 @@ Transactions
                             <tr>
 
                                 <th>ID</th>
-
                                 <th>Product</th>
-
                                 <th>Transaction</th>
-
                                 <th>Quantity</th>
-
                                 <th>Date</th>
-
                                 <th>User</th>
 
                             </tr>
@@ -101,11 +153,7 @@ Transactions
 
                                 <td>
 
-                                    <strong>
-
-                                        {{ transaction[1] }}
-
-                                    </strong>
+                                    <strong>{{ transaction[1] }}</strong>
 
                                 </td>
 
@@ -147,23 +195,23 @@ Transactions
 
                                 </td>
 
-                                <td>
-
-                                    {{ transaction[3] }}
-
-                                </td>
+                                <td>{{ transaction[3] }}</td>
 
                                 <td>
 
-                                    {{ transaction[4].strftime("%B %d, %Y %I:%M %p") }}
+                                    {% if transaction[4] %}
+
+                                        {{ transaction[4].strftime("%B %d, %Y %I:%M %p") }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
 
                                 </td>
 
-                                <td>
-
-                                    {{ transaction[5] }}
-
-                                </td>
+                                <td>{{ transaction[5] }}</td>
 
                             </tr>
 
@@ -175,19 +223,19 @@ Transactions
 
                                 <td colspan="6">
 
-                                    <div class="empty-state">
+                                    <div class="text-center py-5">
 
-                                        <i class="bi bi-inbox display-4"></i>
+                                        <i class="bi bi-inbox display-4 text-muted"></i>
 
                                         <h5 class="mt-3">
 
-                                            No transactions found
+                                            No Transactions Found
 
                                         </h5>
 
-                                        <p class="text-muted">
+                                        <p class="text-muted mb-0">
 
-                                            Inventory transactions will appear here.
+                                            Inventory transaction history will appear here.
 
                                         </p>
 
@@ -213,7 +261,9 @@ Transactions
 
 </div>
 
-<!-- JavaScript -->
+{% endblock %}
+
+{% block js %}
 
 <script src="{{ url_for('static', filename='js/transactions.js') }}"></script>
 

@@ -2,7 +2,9 @@
 
     <div class="card-header">
 
-        <h3>📜 Transaction History</h3>
+        <h3 class="mb-0">
+            📜 Transaction History
+        </h3>
 
     </div>
 
@@ -12,8 +14,8 @@
 
             <table
                 id="transactionTable"
-                class="table table-striped table-hover">
-                
+                class="table table-striped table-hover align-middle">
+
                 <thead>
 
                     <tr>
@@ -31,57 +33,81 @@
 
                 <tbody>
 
-                {% for t in transactions %}
+                    {% if transactions %}
 
-                    <tr>
+                        {% for t in transactions %}
 
-                        <td>{{ t[0] }}</td>
+                        <tr>
 
-                        <td>{{ t[1] }}</td>
+                            <td>{{ t[0] }}</td>
 
-                        <td>
+                            <td>
+                                <strong>{{ t[1] }}</strong>
+                            </td>
 
-                            {% if t[2] == "ADD PRODUCT" %}
+                            <td>
 
-                                <span class="badge bg-primary">
-                                    {{ t[2] }}
-                                </span>
+                                {% if t[2] == "ADD PRODUCT" %}
 
-                            {% elif t[2] == "STOCK IN" %}
+                                    <span class="badge bg-primary">
+                                        {{ t[2] }}
+                                    </span>
 
-                                <span class="badge bg-success">
-                                    {{ t[2] }}
-                                </span>
+                                {% elif t[2] == "STOCK IN" %}
 
-                            {% elif t[2] == "STOCK OUT" %}
+                                    <span class="badge bg-success">
+                                        {{ t[2] }}
+                                    </span>
 
-                                <span class="badge bg-danger">
-                                    {{ t[2] }}
-                                </span>
+                                {% elif t[2] == "STOCK OUT" %}
 
-                            {% else %}
+                                    <span class="badge bg-danger">
+                                        {{ t[2] }}
+                                    </span>
 
-                                <span class="badge bg-secondary">
-                                    {{ t[2] }}
-                                </span>
+                                {% else %}
 
-                            {% endif %}
+                                    <span class="badge bg-secondary">
+                                        {{ t[2] }}
+                                    </span>
 
-                        </td>
+                                {% endif %}
 
-                        <td>{{ t[3] }}</td>
+                            </td>
 
-                        <td>
+                            <td>{{ t[3] }}</td>
 
-                            {{ t[4].strftime("%b %d, %Y %I:%M %p") }}
+                            <td>
 
-                        </td>
+                                {% if t[4] %}
+                                    {{ t[4].strftime("%b %d, %Y %I:%M %p") }}
+                                {% else %}
+                                    -
+                                {% endif %}
 
-                        <td>{{ t[5] }}</td>
+                            </td>
 
-                    </tr>
+                            <td>{{ t[5] }}</td>
 
-                {% endfor %}
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="6" class="text-center py-4 text-muted">
+
+                                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+
+                                No transaction records found.
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
 
                 </tbody>
 

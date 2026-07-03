@@ -2,10 +2,8 @@
 
     <!-- Logo -->
     <div class="sidebar-header">
-
         <h3>📦 Inventory</h3>
         <p>Management System</p>
-
     </div>
 
     <!-- Menu -->
@@ -28,7 +26,7 @@
         {% endif %}
 
         <li>
-            <a href="{{ url_for('transactions') }}">
+            <a href="{{ url_for('transactions') }}"
                 <i class="bi bi-clock-history"></i>
                 <span>Transactions</span>
             </a>
@@ -47,18 +45,19 @@
     <div class="sidebar-user">
 
         <div class="avatar">
-            {{ session.get("user", "?")[0]|upper }}
+            {{ session.get("username", "G")[0]|upper }}
         </div>
 
         <div>
+
             <strong>
-                {{ session.get("user", "Guest") }}
+                {{ session.get("username", "Guest") }}
             </strong>
 
             <br>
 
             <small class="text-light">
-                {{ session.get("role", "user") }}
+                {{ session.get("role", "User")|capitalize }}
             </small>
 
         </div>

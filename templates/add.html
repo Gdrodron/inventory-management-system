@@ -37,14 +37,17 @@ Add Product
 
             </h2>
 
-            <form method="POST"
-                  enctype="multipart/form-data"
-                  autocomplete="off">
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                autocomplete="off">
 
                 <!-- Product Name -->
                 <div class="mb-3">
 
-                    <label for="product_name" class="form-label">
+                    <label
+                        for="product_name"
+                        class="form-label">
 
                         Product Name
 
@@ -64,7 +67,9 @@ Add Product
                 <!-- Category -->
                 <div class="mb-3">
 
-                    <label for="category" class="form-label">
+                    <label
+                        for="category"
+                        class="form-label">
 
                         Category
 
@@ -84,7 +89,9 @@ Add Product
                 <!-- Price -->
                 <div class="mb-3">
 
-                    <label for="price" class="form-label">
+                    <label
+                        for="price"
+                        class="form-label">
 
                         Price
 
@@ -105,7 +112,9 @@ Add Product
                 <!-- Quantity -->
                 <div class="mb-4">
 
-                    <label for="quantity" class="form-label">
+                    <label
+                        for="quantity"
+                        class="form-label">
 
                         Quantity
 
@@ -125,7 +134,9 @@ Add Product
                 <!-- Product Image -->
                 <div class="mb-4">
 
-                    <label for="image" class="form-label">
+                    <label
+                        for="image"
+                        class="form-label">
 
                         Product Image
 
@@ -147,11 +158,11 @@ Add Product
 
                     <img
                         id="imagePreview"
-                        src="#"
+                        src=""
                         alt="Product Preview"
-                        loading="lazy"
                         class="img-thumbnail mt-3 d-none"
-                        style="max-width:220px;">
+                        style="max-width:220px;"
+                        loading="lazy">
 
                 </div>
 
@@ -206,39 +217,36 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = imageInput.files[0];
 
         if (!file) {
-
+            preview.src = "";
             preview.classList.add("d-none");
-            preview.src = "#";
-
             return;
-
         }
 
         const allowedTypes = [
-
             "image/jpeg",
             "image/png",
             "image/webp"
-
         ];
 
         if (!allowedTypes.includes(file.type)) {
 
-            alert("Only JPG, PNG, and WEBP images are allowed.");
+            alert("Only JPG, JPEG, PNG, and WEBP images are allowed.");
 
             imageInput.value = "";
-
+            preview.src = "";
             preview.classList.add("d-none");
 
-            preview.src = "#";
-
             return;
-
         }
 
-        preview.src = URL.createObjectURL(file);
+        const objectURL = URL.createObjectURL(file);
 
+        preview.src = objectURL;
         preview.classList.remove("d-none");
+
+        preview.onload = () => {
+            URL.revokeObjectURL(objectURL);
+        };
 
     });
 
