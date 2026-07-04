@@ -38,7 +38,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-app.secret_key = os.getenv("SECRET_KEY", "dev-secret")
+app.secret_key = os.getenv("SECRET_KEY")
 
 
 # =========================
@@ -55,7 +55,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # DATABASE
 # =========================
 
-conn = psycopg2.connect(os.environ["DATABASE_URL"])
+conn = psycopg2.connect(
+    os.environ["DATABASE_URL"],
+    options="-c search_path=inventory"
+)
 conn.autocommit = True
 
 # =========================
@@ -117,8 +120,6 @@ def login():
         username = request.form.get("username", "").strip().lower()
         password = request.form.get("password", "")
 
-        print("Username entered:", username)
-
         cur = conn.cursor()
 
         try:
@@ -129,26 +130,26 @@ def login():
             """, (username,))
 
             user = cur.fetchone()
-            print("User:", user)
 
         finally:
             cur.close()
 
         if user:
+
             db_password = (user[2] or "").strip()
 
-            print("DB Password:", db_password)
-            print("Entered Password:", password)
-
-            password_ok = (db_password == password.strip())
-
-            print("Password OK:", password_ok)
+            try:
+                password_ok = check_password_hash(db_password, password)
+            except Exception:
+                password_ok = (db_password == password.strip())
 
             if password_ok:
+
                 session.clear()
                 session["user_id"] = user[0]
                 session["username"] = user[1]
                 session["role"] = (user[3] or "").lower()
+
                 flash("Welcome back!", "success")
                 return redirect("/")
 
@@ -409,7 +410,7 @@ def add_product():
             # =========================
 
             cur.execute("""
-                INSERT INTO transactions
+                INSERT INTO inventory_transactions
                 (
                     product_id,
                     transaction_type,
